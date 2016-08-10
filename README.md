@@ -1,6 +1,8 @@
-Using some sources from Yahoo FFL webpages, this generates keeper data based on rules provided in the arguments.
+Generates keeper values based on Yahoo webpage inputs and rules provided via command arguments.
 
-View `get_keeper_data.py --help`
+For help:
+
+    $ ./get_keeper_data.py --help
 
 # Example
 Example league has the following rules:
@@ -11,6 +13,7 @@ Example league has the following rules:
 * Unkeepable players will be noted with a 99 round keeper value
 
 With that, the command will look like:
+
     $ ./get_keeper_data.py -o input_examples/owners.yaml -d input_examples/draft.txt -r input_examples/rosters.txt -k 2 -f 10 --unkeepable-rounds 3 --unkeepable-round-id 99
 
 # Requirements
