@@ -46,7 +46,11 @@ The owners file is a simple YAML file with a hash that maps team names to owner 
     City Marshalls: Belmin
     Crunk Gronks: Tito
 
-# Outut
+# Output
+Two types of output:
+
+* JSON (default): Could be used to populate Yahoo's keeper page
+* CSV (require `--csv` option): To be imported into spreadsheets
 
 # Notes
 * When an NFL player switches team, I cannot tell if he cleared waivers so I give him the worst (highest number) round
