@@ -190,13 +190,10 @@ def parse_roster(args):
                     nfl_pos = player_match.group('pos')
                     player_key = get_player_key(player_name, nfl_team, nfl_pos)
                     roster[player_key] = {
-                        'last_manager': get_manager(args, current_team),
+                        'current_manager': get_manager(args, current_team),
                         'name': player_name,
-                        'nfl_team': nfl_team,
-                        'nfl_pos': nfl_pos,
-                        'draft_manager': '',
-                        'draft_round': None,
-                        'keeper_round': None,
+                        'team': nfl_team,
+                        'pos': nfl_pos,
                     }
                 current_snippet = ''
 
@@ -243,7 +240,7 @@ def add_keeper_data(args, roster):
             draft_manager = get_manager(args, player_match.group('owner'))
             player_key = get_player_key(player_name, nfl_team, nfl_pos)
             if player_key in roster:
-                roster[player_key]['current_round'] = current_round
+                roster[player_key]['draft_round'] = current_round
                 roster[player_key]['draft_manager'] = draft_manager
             else:
                 print('%s - Not in any team anymore (ID=%s)' % (player_name, player_key))
@@ -259,16 +256,17 @@ def add_keeper_data(args, roster):
 
         # Undrafted players
         if not roster[player_key].get('draft_manager'):
-            roster[player_key]['current_round'] = 'FA'
+            print('{} was a FA'.format(roster[player_key]['name']))
+            roster[player_key]['draft_round'] = 'FA'
             roster[player_key]['keeper_round'] = args.fa_round
         else:
-            if int(roster[player_key]['current_round']) <= args.unkeepable_rounds:
+            if int(roster[player_key]['draft_round']) <= args.unkeepable_rounds:
                 roster[player_key]['keeper_round'] = args.unkeepable_round_id
             else:
-                if roster[player_key]['draft_manager'] == roster[player_key]['last_manager']:
-                    roster[player_key]['keeper_round'] = int(roster[player_key]['current_round']) - args.keeper_sub_rounds
+                if roster[player_key]['draft_manager'] == roster[player_key]['current_manager']:
+                    roster[player_key]['keeper_round'] = int(roster[player_key]['draft_round']) - args.keeper_sub_rounds
                 else:
-                    roster[player_key]['keeper_round'] = min(int(roster[player_key]['current_round']) - args.keeper_sub_rounds, args.fa_round)
+                    roster[player_key]['keeper_round'] = min(int(roster[player_key]['draft_round']) - args.keeper_sub_rounds, args.fa_round)
     return roster
 
 
