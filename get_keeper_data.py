@@ -50,13 +50,13 @@ def main():
     # Parse roster
     roster = parse_roster(args)
     if not roster:
-        print('No valid roster, exiting')
+        err('No valid roster, exiting')
         sys.exit()
 
     # Add keeper data
     roster = add_keeper_data(args, roster)
     if not roster:
-        print('No valid keeper data, exiting')
+        err('No valid keeper data, exiting')
         sys.exit()
 
     js_dict = ','.join(['"{}":{}'.format(p['name'], p['keeper_round']) for k, p in roster.items()])
@@ -64,6 +64,10 @@ def main():
     print('')
     print('To import to Yahoo\'s keeper page:')
     print('var k={{{}}};'.format(js_dict))
+
+
+def err(msg, **kwargs):
+    print(msg, file=sys.stderr, **kwargs)
 
 
 def parse_cmd():
@@ -199,12 +203,12 @@ def parse_roster(args):
 
     # If we still have soem text in current snippet, our regex is failing
     if current_snippet.strip():
-        print('Error! Some text not caught, started at:\n------\n{}\n------'.format('\n'.join(current_snippet.split('\n')[:3])))
+        err('Error! Some text not caught, started at:\n------\n{}\n------'.format('\n'.join(current_snippet.split('\n')[:3])))
         return None
 
     # We have some unknown owners
     if len(unknown_owners):
-        print ('Error! Unknown owners:\n{}'.format('\n - ' + '\n - '.join(unknown_owners)))
+        err('Error! Unknown owners:\n{}'.format('\n - ' + '\n - '.join(unknown_owners)))
         return None
 
     return roster
@@ -246,12 +250,12 @@ def add_keeper_data(args, roster):
 
     # If we still have some text in current snippet, our regex is failing
     if current_snippet.strip():
-        print('Error! Some draft text not caught, started at:\n------\n{}\n------'.format('\n'.join(current_snippet.split('\n')[:3])))
+        err('Error! Some draft text not caught, started at:\n------\n{}\n------'.format('\n'.join(current_snippet.split('\n')[:3])))
         return None
 
     # We have some unknown owners
     if len(unknown_owners):
-        print ('Error! Unknown owners:\n{}'.format('\n - ' + '\n - '.join(unknown_owners)))
+        err('Error! Unknown owners:\n{}'.format('\n - ' + '\n - '.join(unknown_owners)))
         return None
 
     # Add keeper data
