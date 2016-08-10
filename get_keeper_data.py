@@ -4,6 +4,7 @@ import re
 import sys
 import argparse
 import yaml
+import csv
 
 # Globals for team mapping
 team_owner_map = {}
@@ -59,11 +60,21 @@ def main():
         err('No valid keeper data, exiting')
         sys.exit()
 
-    js_dict = ','.join(['"{}":{}'.format(p['name'], p['keeper_round']) for k, p in roster.items()])
+    # JSON output
+    if not args.csv:
+        js_dict = ','.join(['"{}":{}'.format(p['name'], p['keeper_round']) for k, p in roster.items()])
+        print('')
+        print('JSON hash to use for Yahoo\'s keeper page:')
+        print('~~~')
+        print('var k={{{}}};'.format(js_dict))
+        print('~~~')
 
-    print('')
-    print('To import to Yahoo\'s keeper page:')
-    print('var k={{{}}};'.format(js_dict))
+    # CSV output
+    else:
+        writer = csv.DictWriter(sys.stdout, next(iter(roster.values())).keys())
+        writer.writeheader()
+        for k,r in roster.items():
+            writer.writerow(r)
 
 
 def err(msg, **kwargs):
@@ -131,6 +142,13 @@ def parse_cmd():
         default=999,
         dest='unkeepable_round_id',
         help='A number to indicate that a pick is unkeepable',
+    )
+
+    parser.add_argument(
+        '--csv',
+        action='store_true',
+        dest='csv',
+        help='CSV output to stdout',
     )
 
     return parser.parse_args()
@@ -264,6 +282,7 @@ def add_keeper_data(args, roster):
         # Undrafted players
         if not roster[player_key].get('draft_manager'):
             roster[player_key]['draft_round'] = 'FA'
+            roster[player_key]['draft_manager'] = 'FA'
             roster[player_key]['keeper_round'] = args.fa_round
         else:
             if int(roster[player_key]['draft_round']) <= args.unkeepable_rounds:
