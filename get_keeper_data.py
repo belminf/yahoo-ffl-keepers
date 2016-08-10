@@ -139,10 +139,6 @@ def get_player_key(player, team, pos):
 def get_team_key(team):
     return team[:12].lower().strip()
 
-team_owner_map = {}
-team_owner_map_loaded = False
-unknown_owners = []
-
 
 def get_manager(args, team):
     global team_owner_map
