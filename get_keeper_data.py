@@ -5,6 +5,66 @@ import sys
 import argparse
 import yaml
 
+# Globals for team mapping
+team_owner_map = {}
+team_owner_map_loaded = False
+unknown_owners = []
+
+# Roster reguglar expressions
+#
+# Team example:
+# ~~
+# Y Not Zoidberg?!
+# Player  Cost
+# ~~
+#
+# Player example
+# ~~
+# No new player Notes$
+# Ben Roethlisberger Pit - QB$
+# Mon 7:10 pm @ Washington
+# ~~
+ROSTER_TEAM_RE = re.compile(r'(?P<team>.*)\nPlayer[ \t]+Cost\n')
+ROSTER_PLAYER_RE = re.compile(r'.*[nN]ote.*\n((?P<name>.+) (?P<team>[a-zA-Z]{2,3}) - (?P<pos>[A-Z]{1,3})\n((Out|Probable|Questionable|Suspended|PUP-P|Doubtful)\n)?.*(@|vs).*|(?P<empty>--empty--))\n?')
+
+# Draft regular expressions
+#
+# Round example:
+# ~
+# Round 10
+# ~
+#
+# Player example:
+# ~
+# 1.	LeSean McCoy
+# (Buf - RB)
+# Game of Foles
+# ~
+DRAFT_ROUND_RE = re.compile(r'Round (?P<round>[1-9][0-9]?)\n')
+DRAFT_PLAYER_RE = re.compile(r'(?P<pick>[1-9][0-9]*)\.\s+(?P<player>.+)\n(.\n)?\((?P<team>[a-zA-Z]{2,3}) - (?P<pos>[A-Z]{1,3})\)\n(?P<owner>[^\n]+)\n?')
+
+
+def main():
+    args = parse_cmd()
+
+    # Parse roster
+    roster = parse_roster(args)
+    if not roster:
+        print('No valid roster, exiting')
+        sys.exit()
+
+    # Add keeper data
+    roster = add_keeper_data(args, roster)
+    if not roster:
+        print('No valid keeper data, exiting')
+        sys.exit()
+
+    js_dict = ','.join(['"{}":{}'.format(p['name'], p['keeper_round']) for k, p in roster.items()])
+
+    print('')
+    print('To import to Yahoo\'s keeper page:')
+    print('var k={{{}}};'.format(js_dict))
+
 
 def parse_cmd():
     parser = argparse.ArgumentParser(description='Computes keeper value')
@@ -101,23 +161,6 @@ def get_manager(args, team):
             unknown_owners.append(team)
         return None
 
-# Roster reguglar expressions
-#
-# Team example:
-# ~~
-# Y Not Zoidberg?!
-# Player  Cost
-# ~~
-#
-# Player example
-# ~~
-# No new player Notes$
-# Ben Roethlisberger Pit - QB$
-# Mon 7:10 pm @ Washington
-# ~~
-ROSTER_TEAM_RE = re.compile(r'(?P<team>.*)\nPlayer[ \t]+Cost\n')
-ROSTER_PLAYER_RE = re.compile(r'.*[nN]ote.*\n((?P<name>.+) (?P<team>[a-zA-Z]{2,3}) - (?P<pos>[A-Z]{1,3})\n((Out|Probable|Questionable|Suspended|PUP-P|Doubtful)\n)?.*(@|vs).*|(?P<empty>--empty--))\n?')
-
 
 def parse_roster(args):
     global unknown_owners
@@ -172,22 +215,6 @@ def parse_roster(args):
         return None
 
     return roster
-
-# Draft regular expressions
-#
-# Round example:
-# ~
-# Round 10
-# ~
-#
-# Player example:
-# ~
-# 1.	LeSean McCoy
-# (Buf - RB)
-# Game of Foles
-# ~
-DRAFT_ROUND_RE = re.compile(r'Round (?P<round>[1-9][0-9]?)\n')
-DRAFT_PLAYER_RE = re.compile(r'(?P<pick>[1-9][0-9]*)\.\s+(?P<player>.+)\n\((?P<team>[a-zA-Z]{2,3}) - (?P<pos>[A-Z]{1,3})\)\n(?P<owner>[^\n]+)\n?')
 
 
 def add_keeper_data(args, roster):
@@ -250,12 +277,4 @@ def add_keeper_data(args, roster):
 
 
 if __name__ == '__main__':
-    args = parse_cmd()
-
-    # Parse roster
-    roster = parse_roster(args)
-    if not roster:
-        print('No valid roster, exiting')
-        sys.exit()
-
-    print(add_keeper_data(args, roster))
+    main()
