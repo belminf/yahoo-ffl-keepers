@@ -64,9 +64,9 @@ def main():
     if not args.csv:
         js_dict = ','.join(['"{}":{}'.format(p['name'], p['keeper_round']) for k, p in roster.items()])
         print('')
-        print('JSON hash to use for Yahoo\'s keeper page:')
+        print('Javascript to populate Yahoo\'s keeper page:')
         print('~~~')
-        print('var k={{{}}};'.format(js_dict))
+        print('(function(){{if(!window.jQuery){{var s=document.createElement("script");s.src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js";document.head.appendChild(s);}}}}());var k={{{}}};$("table#  ysf-keeperplayerlist tbody tr").each(function (i,el){{t=$(this).find("td");p=$(t[0]).html(); v=k[p];if(v!==undefined){{$(t[1]).find("input").val(v);}}}});'.format(js_dict))
         print('~~~')
 
     # CSV output
@@ -82,7 +82,7 @@ def err(msg, **kwargs):
 
 
 def parse_cmd():
-    parser = argparse.ArgumentParser(description='Generates keeper draft value and outputs JSON')
+    parser = argparse.ArgumentParser(description='Generates keeper draft value and outputs Javascript')
 
     parser.add_argument(
         '-d',

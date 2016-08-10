@@ -49,8 +49,18 @@ The owners file is a simple YAML file with a hash that maps team names to owner 
 # Output
 Two types of output:
 
-* JSON (default): Could be used to populate Yahoo's keeper page
+* Javascript (default): Used to populate Yahoo's keeper page, view next section for details
 * CSV (require `--csv` option): To be imported into spreadsheets
+
+### Javascript
+The Javascript uses jQuery to popualate the keeper page with the following URL (`$LEAGUE_ID` is your Yahoo league ID):
+
+    https://football.fantasysports.yahoo.com/f1/$LEAGUE_ID/setkeepercosts
+
+To execute the Javascript, in Chrome you have two options:
+
+1. Type `javscript:` in the address bar and then paste the Javascript code
+2. Input the Javascript via the `Development Tools` (<kbd>Ctrl+Shift+I</kbd>) console
 
 # Notes
 * When an NFL player switches team, I cannot tell if he cleared waivers so I give him the worst (highest number) round
