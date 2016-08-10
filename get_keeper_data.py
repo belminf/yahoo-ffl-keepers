@@ -251,6 +251,11 @@ def add_keeper_data(args, roster):
         print('Error! Some draft text not caught, started at:\n------\n{}\n------'.format('\n'.join(current_snippet.split('\n')[:3])))
         return None
 
+    # We have some unknown owners
+    if len(unknown_owners):
+        print ('Error! Unknown owners:\n{}'.format('\n - ' + '\n - '.join(unknown_owners)))
+        return None
+
     # Add keeper data
     for player_key in roster.keys():
 
