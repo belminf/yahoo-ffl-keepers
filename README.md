@@ -54,3 +54,4 @@ Two types of output:
 
 # Notes
 * When an NFL player switches team, I cannot tell if he cleared waivers so I give him the worst (highest number) round
+* Currently, Yahoo's keeper page only provides player names which could cause issues for duplicate names (e.g., New York defenses)
