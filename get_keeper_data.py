@@ -66,7 +66,7 @@ def main():
         print('')
         print('Javascript to populate Yahoo\'s keeper page:')
         print('~~~')
-        print('(function(){{if(!window.jQuery){{var s=document.createElement("script");s.src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js";document.head.appendChild(s);}}}}());var k={{{}}};$("table#  ysf-keeperplayerlist tbody tr").each(function (i,el){{t=$(this).find("td");p=$(t[0]).html(); v=k[p];if(v!==undefined){{$(t[1]).find("input").val(v);}}}});'.format(js_dict))
+        print('(function(){{if(!window.jQuery){{var s=document.createElement("script");s.src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js";document.head.appendChild(s);}}}}());var k={{{}}};$("table#ysf-keeperplayerlist tbody tr").each(function (i,el){{t=$(this).find("td");p=$(t[0]).html(); v=k[p];if(v!==undefined){{$(t[1]).find("input").val(v);}}}});'.format(js_dict))
         print('~~~')
 
     # CSV output
