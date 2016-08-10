@@ -242,8 +242,6 @@ def add_keeper_data(args, roster):
             if player_key in roster:
                 roster[player_key]['draft_round'] = current_round
                 roster[player_key]['draft_manager'] = draft_manager
-            else:
-                print('%s - Not in any team anymore (ID=%s)' % (player_name, player_key))
             current_snippet = ''
 
     # If we still have some text in current snippet, our regex is failing
