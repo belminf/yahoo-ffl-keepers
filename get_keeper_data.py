@@ -261,7 +261,6 @@ def add_keeper_data(args, roster):
 
         # Undrafted players
         if not roster[player_key].get('draft_manager'):
-            print('{} was a FA'.format(roster[player_key]['name']))
             roster[player_key]['draft_round'] = 'FA'
             roster[player_key]['keeper_round'] = args.fa_round
         else:
