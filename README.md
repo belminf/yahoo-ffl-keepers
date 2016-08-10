@@ -2,6 +2,17 @@ Using some sources from Yahoo FFL webpages, this generates keeper data based on 
 
 View `get_keeper_data.py --help`
 
+# Example
+Example league has the following rules:
+
+* Players dafted in the Nth round last year get slotted in the Nth-2 round this year
+* All non-drafted players that were picked up last year are slotted in the 10th round
+* Players drafted in the first 3 rounds are not keepable
+* Unkeepable players will be noted with a 99 round keeper value
+
+With that, the command will look like:
+    $ ./get_keeper_data.py -o input_examples/owners.yaml -d input_examples/draft.txt -r input_examples/rosters.txt -k 2 -f 10 --unkeepable-rounds 3 --unkeepable-round-id 99
+
 # Requirements
 Using python3:
 
