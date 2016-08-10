@@ -133,7 +133,7 @@ def parse_cmd():
 
 
 def get_player_key(player, team, pos):
-    return '{}/{}/{}'.format(player, team, pos)
+    return '{}/{}/{}'.format(player.upper(), team.upper(), pos.upper())
 
 
 def get_team_key(team):
