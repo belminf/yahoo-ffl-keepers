@@ -125,7 +125,7 @@ def parse_cmd():
     )
 
     parser.add_argument(
-        '-unkeepable-round-id',
+        '--unkeepable-round-id',
         metavar='ROUND',
         type=int,
         default=999,
