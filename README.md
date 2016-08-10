@@ -60,7 +60,7 @@ The Javascript uses jQuery to popualate the keeper page with the following URL (
 To execute the Javascript, in Chrome you have two options:
 
 1. Type `javscript:` in the address bar and then paste the Javascript code
-2. Input the Javascript via the `Development Tools` (<kbd>Ctrl+Shift+I</kbd>) console
+2. Paste the Javascript in the `Development Tools` (<kbd>Ctrl+Shift+I</kbd>) console
 
 # Notes
 * When an NFL player switches team, I cannot tell if he cleared waivers so I give him the worst (highest number) round
