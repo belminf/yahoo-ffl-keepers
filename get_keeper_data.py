@@ -82,7 +82,7 @@ def err(msg, **kwargs):
 
 
 def parse_cmd():
-    parser = argparse.ArgumentParser(description='Computes keeper value')
+    parser = argparse.ArgumentParser(description='Generates keeper draft value and outputs JSON')
 
     parser.add_argument(
         '-d',
